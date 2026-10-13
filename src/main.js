@@ -26,7 +26,7 @@ for (const id of [
   'summary-misses', 'summary-clean', 'review', 'done',
   'board', 'clock', 'target', 'counter', 'solved-count', 'missed-count',
   'remaining-count', 'progress-percent', 'progress-bar',
-  'status', 'turn', 'puzzle-meta', 'end-cycle', 'show-solution',
+  'status', 'turn', 'puzzle-meta', 'end-cycle', 'show-solution', 'previous-puzzle', 'next-puzzle',
 ]) {
   // 'progress-bar' is reachable as el.progressBar.
   el[id.replace(/-([a-z])/g, (_, char) => char.toUpperCase())] = document.getElementById(id);
@@ -65,6 +65,7 @@ let live = false;
 // 'cycle' is the timed run; 'review' is the untimed pass over that cycle's
 // misses, which records nothing and never touches the clock.
 let mode = 'cycle';
+let browseIndex = 0;
 let reviewQueue = [];
 let reviewPos = 0;
 
@@ -72,13 +73,21 @@ const clock = new Clock({ onTick: renderClock });
 
 const runner = new PuzzleRunner(el.board, {
   onReady({ color }) {
-    live = true;
+    live = mode === 'cycle';
     setStatus('', '');
     el.showSolution.disabled = true;
+    el.previousPuzzle.disabled = mode !== 'browse' || index <= 0;
+    el.nextPuzzle.disabled = mode !== 'browse' || index >= puzzles.length - 1;
     // Only revealed once the setup move has landed, so it describes the
     // position the user actually has to solve.
     el.turn.textContent = `${color === 'white' ? 'White' : 'Black'} to move`;
-    if (mode === 'review') return;
+    if (mode === 'review' || mode === 'browse') {
+      if (mode === 'browse') {
+        runner.setInteractive(false);
+        setStatus('Browsing set — resume the cycle to continue', '');
+      }
+      return;
+    }
     puzzleStartMs = clock.elapsedMs;
     // Do not start counting into a tab the user cannot see.
     if (document.visibilityState === 'visible') clock.start();
@@ -565,6 +574,8 @@ function renderPractice() {
   const percent = Math.round((completed / puzzles.length) * 100);
   const current = `Puzzle ${Math.min(index + 1, puzzles.length)} of ${puzzles.length}`;
   el.counter.textContent = current;
+  el.previousPuzzle.disabled = mode !== 'browse' || index <= 0;
+  el.nextPuzzle.disabled = mode !== 'browse' || index >= puzzles.length - 1;
   el.solvedCount.textContent = solved;
   el.missedCount.textContent = completed - solved;
   el.remainingCount.textContent = puzzles.length - completed;
@@ -580,6 +591,22 @@ function loadPuzzle(i) {
   el.turn.textContent = '';
   el.puzzleMeta.textContent = `${puzzle.rating} · ${difficultyOf(puzzle.rating)}`;
   runner.load(puzzle);
+}
+
+function browsePuzzle(delta) {
+  if (!puzzles.length) return;
+  if (mode === 'cycle') {
+    runner.halt();
+    clock.stop();
+    live = false;
+    persistProgress();
+    mode = 'browse';
+    browseIndex = index;
+  }
+  browseIndex = Math.max(0, Math.min(puzzles.length - 1, browseIndex + delta));
+  index = browseIndex;
+  renderPractice();
+  loadPuzzle(index);
 }
 
 function renderClock(ms) {
@@ -650,6 +677,9 @@ el.deleteProgram.addEventListener('click', () => {
 });
 
 el.review.addEventListener('click', startReview);
+
+el.previousPuzzle.addEventListener('click', () => browsePuzzle(-1));
+el.nextPuzzle.addEventListener('click', () => browsePuzzle(1));
 
 el.showSolution.addEventListener('click', () => {
   runner.revealSolution();

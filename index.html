@@ -104,7 +104,11 @@
           <div class="dashboard" aria-label="Cycle progress dashboard">
             <div class="dashboard-current">
               <span class="dashboard-label">Current puzzle</span>
-              <strong id="counter">Puzzle 1 of 100</strong>
+              <div class="puzzle-navigation" aria-label="Puzzle set navigation">
+                <button id="previous-puzzle" class="icon-button" type="button" aria-label="Previous puzzle" disabled>‹</button>
+                <strong id="counter">Puzzle 1 of 100</strong>
+                <button id="next-puzzle" class="icon-button" type="button" aria-label="Next puzzle" disabled>›</button>
+              </div>
             </div>
             <dl class="dashboard-metrics">
               <div>

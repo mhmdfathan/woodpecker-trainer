@@ -401,6 +401,31 @@ body {
   font-weight: 600;
 }
 
+.puzzle-navigation {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.icon-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #d5d0c8;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg);
+  font: 22px/1 sans-serif;
+}
+
+.icon-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.icon-button:disabled {
+  opacity: 0.35;
+}
+
 .dashboard-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

@@ -245,6 +245,12 @@ export class PuzzleRunner {
     this.onResolved?.({ solved, line });
   }
 
+  /** Disable interaction while browsing the set without ending the cycle. */
+  setInteractive(interactive) {
+    this.state = interactive ? 'solving' : 'browsing';
+    this.sync({ interactive });
+  }
+
   /**
    * Abandon the current puzzle without resolving it — used when the user leaves
    * the Practice screen mid-cycle. Pending timers must die, or a solution flash
