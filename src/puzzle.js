@@ -38,12 +38,12 @@ export class PuzzleRunner {
   /**
    * @param element host element for the board
    * @param handlers.onReady    fired when a puzzle becomes interactive (step 3 starts the clock here)
-   * @param handlers.onRetry    fired with { line } after the first wrong move
+   * @param handlers.onMistake  fired with { line } after a wrong move
    * @param handlers.onResolved fired with { solved, line } when a puzzle ends
    */
-  constructor(element, { onReady, onRetry, onResolved } = {}) {
+  constructor(element, { onReady, onMistake, onResolved } = {}) {
     this.onReady = onReady;
-    this.onRetry = onRetry;
+    this.onMistake = onMistake;
     this.onResolved = onResolved;
     this.timers = [];
     this.chess = new Chess();
@@ -156,22 +156,17 @@ export class PuzzleRunner {
     // never left on the board, preventing visual distortion while the user
     // chooses whether to retry or reveal the solution.
     const line = this.sanLine(fenBefore);
-    this.state = 'awaiting-choice';
     this.chess.undo();
     this.lastMove = before;
-    this.sync({ interactive: false });
-    this.pendingLine = line;
-    this.onRetry?.({ line });
-  }
-
-  retry() {
-    if (this.state !== 'awaiting-choice') return;
     this.state = 'solving';
     this.sync({ interactive: true });
+    this.pendingLine = line;
+    this.onMistake?.({ line });
   }
 
   revealSolution() {
-    if (this.state !== 'awaiting-choice') return;
+    if (this.state !== 'solving' || !this.pendingLine) return;
+    this.state = 'revealing';
     this.showSolution(this.pendingLine ?? []);
   }
 

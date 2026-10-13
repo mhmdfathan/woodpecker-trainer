@@ -25,7 +25,7 @@ for (const id of [
   'summary-cycle', 'summary-time', 'summary-stats', 'summary-best', 'summary-miss-count',
   'summary-misses', 'summary-clean', 'review', 'done',
   'board', 'clock', 'target', 'counter', 'solved-count', 'missed-count', 'progress-bar',
-  'status', 'turn', 'puzzle-meta', 'end-cycle', 'retry-move', 'show-solution',
+  'status', 'turn', 'puzzle-meta', 'end-cycle', 'show-solution',
 ]) {
   // 'progress-bar' is reachable as el.progressBar.
   el[id.replace(/-([a-z])/g, (_, char) => char.toUpperCase())] = document.getElementById(id);
@@ -73,8 +73,7 @@ const runner = new PuzzleRunner(el.board, {
   onReady({ color }) {
     live = true;
     setStatus('', '');
-    el.retryMove.hidden = true;
-    el.showSolution.hidden = true;
+    el.showSolution.disabled = true;
     // Only revealed once the setup move has landed, so it describes the
     // position the user actually has to solve.
     el.turn.textContent = `${color === 'white' ? 'White' : 'Black'} to move`;
@@ -83,11 +82,9 @@ const runner = new PuzzleRunner(el.board, {
     // Do not start counting into a tab the user cannot see.
     if (document.visibilityState === 'visible') clock.start();
   },
-  onRetry() {
-    live = false;
-    setStatus('Not quite — try again or reveal the solution', 'retry');
-    el.retryMove.hidden = false;
-    el.showSolution.hidden = false;
+  onMistake() {
+    setStatus('Not quite — the board was reset. Try another move or show the solution.', 'retry');
+    el.showSolution.disabled = false;
   },
   onResolved({ solved, line }) {
     live = false;
@@ -646,18 +643,9 @@ el.deleteProgram.addEventListener('click', () => {
 
 el.review.addEventListener('click', startReview);
 
-el.retryMove.addEventListener('click', () => {
-  runner.retry();
-  live = true;
-  el.retryMove.hidden = true;
-  el.showSolution.hidden = true;
-  setStatus('', '');
-});
-
 el.showSolution.addEventListener('click', () => {
   runner.revealSolution();
-  el.retryMove.hidden = true;
-  el.showSolution.hidden = true;
+  el.showSolution.disabled = true;
   setStatus('Solution', 'solution');
 });
 
