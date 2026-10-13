@@ -88,6 +88,8 @@ check('first-run target prompt shown', visible(window, 'first-run'));
 window.document.getElementById('target-input').value = '25';
 window.document.getElementById('primary').click();
 check('practice screen opens', visible(window, 'practice'));
+check('retry control exists', window.document.getElementById('retry-move') != null);
+check('solution control exists', window.document.getElementById('show-solution') != null);
 check('target applied', text(window, 'target') === '25:00', text(window, 'target'));
 check('counter reads puzzle 1', text(window, 'counter') === 'Puzzle 1 of 100', text(window, 'counter'));
 

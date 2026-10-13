@@ -39,16 +39,19 @@ export class PuzzleRunner {
   /**
    * @param element host element for the board
    * @param handlers.onReady    fired when a puzzle becomes interactive (step 3 starts the clock here)
+   * @param handlers.onRetry    fired with { line } after the first wrong move
    * @param handlers.onResolved fired with { solved, line } when a puzzle ends
    */
-  constructor(element, { onReady, onResolved } = {}) {
+  constructor(element, { onReady, onRetry, onResolved } = {}) {
     this.onReady = onReady;
+    this.onRetry = onRetry;
     this.onResolved = onResolved;
     this.timers = [];
     this.chess = new Chess();
     this.puzzle = null;
     this.index = 0;
     this.lastMove = undefined;
+    this.pendingLine = null;
     this.state = 'idle';
 
     this.ground = Chessground(element, {
@@ -78,6 +81,7 @@ export class PuzzleRunner {
     this.chess = new Chess(puzzle.fen);
     this.index = 0;
     this.lastMove = undefined;
+    this.pendingLine = null;
     this.state = 'setup';
 
     // The side to move in the raw FEN is the opponent, so the solver is the other.
@@ -149,19 +153,32 @@ export class PuzzleRunner {
       return;
     }
 
-    // Instant fail: hold the wrong move on screen, then rewind and replay the
-    // intended line. No retries.
+    // Hold the wrong move briefly, then rewind to the same position. The user
+    // must explicitly choose whether to retry or reveal the solution.
     this.state = 'failing';
     this.sync({ interactive: false });
     const line = this.sanLine(fenBefore);
+    this.pendingLine = line;
     this.wait(() => {
       this.chess.undo();
       this.ground.set({ animation: { enabled: false } });
       this.lastMove = before;
       this.sync({ interactive: false });
       this.ground.set({ animation: { enabled: true } });
-      this.showSolution(line);
+      this.state = 'awaiting-choice';
+      this.onRetry?.({ line });
     }, MISTAKE_HOLD);
+  }
+
+  retry() {
+    if (this.state !== 'awaiting-choice') return;
+    this.state = 'solving';
+    this.sync({ interactive: true });
+  }
+
+  revealSolution() {
+    if (this.state !== 'awaiting-choice') return;
+    this.showSolution(this.pendingLine ?? []);
   }
 
   /** Replay the moves the solver should have played, one at a time. */

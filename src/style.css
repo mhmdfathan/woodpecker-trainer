@@ -437,6 +437,16 @@ cg-board {
   z-index: 2;
 }
 
+.practice-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.practice-actions .secondary {
+  margin-top: 0;
+}
+
 .status {
   min-height: 1.5em;
   margin: 16px 0 0;
