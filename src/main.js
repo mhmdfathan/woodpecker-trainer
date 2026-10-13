@@ -76,8 +76,8 @@ const runner = new PuzzleRunner(el.board, {
     live = mode === 'cycle';
     setStatus('', '');
     el.showSolution.disabled = true;
-    el.previousPuzzle.disabled = mode !== 'browse' || index <= 0;
-    el.nextPuzzle.disabled = mode !== 'browse' || index >= puzzles.length - 1;
+    el.previousPuzzle.disabled = index <= 0;
+    el.nextPuzzle.disabled = index >= puzzles.length - 1;
     // Only revealed once the setup move has landed, so it describes the
     // position the user actually has to solve.
     el.turn.textContent = `${color === 'white' ? 'White' : 'Black'} to move`;
@@ -574,8 +574,8 @@ function renderPractice() {
   const percent = Math.round((completed / puzzles.length) * 100);
   const current = `Puzzle ${Math.min(index + 1, puzzles.length)} of ${puzzles.length}`;
   el.counter.textContent = current;
-  el.previousPuzzle.disabled = mode !== 'browse' || index <= 0;
-  el.nextPuzzle.disabled = mode !== 'browse' || index >= puzzles.length - 1;
+  el.previousPuzzle.disabled = index <= 0;
+  el.nextPuzzle.disabled = index >= puzzles.length - 1;
   el.solvedCount.textContent = solved;
   el.missedCount.textContent = completed - solved;
   el.remainingCount.textContent = puzzles.length - completed;

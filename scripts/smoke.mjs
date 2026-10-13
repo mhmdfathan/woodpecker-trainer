@@ -92,7 +92,7 @@ check('solution control exists', window.document.getElementById('show-solution')
 check('target applied', text(window, 'target') === '25:00', text(window, 'target'));
 check('counter reads puzzle 1', text(window, 'counter') === 'Puzzle 1 of 100', text(window, 'counter'));
 check('puzzle navigation controls exist', !!window.document.querySelector('#previous-puzzle') && !!window.document.querySelector('#next-puzzle'));
-check('puzzle navigation starts disabled', window.document.querySelector('#previous-puzzle').disabled && window.document.querySelector('#next-puzzle').disabled);
+check('puzzle navigation starts at the first boundary', window.document.querySelector('#previous-puzzle').disabled && !window.document.querySelector('#next-puzzle').disabled);
 check('dashboard is visible', visible(window, 'practice') && Boolean(window.document.querySelector('.dashboard')) && text(window, 'counter') === 'Puzzle 1 of 100');
 check('dashboard shows initial counts',
   text(window, 'solved-count') === '0' &&
