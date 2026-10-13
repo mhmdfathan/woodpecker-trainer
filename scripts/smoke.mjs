@@ -71,8 +71,8 @@ check('bundle runs without throwing', errors.length === 0, errors[0] ?? '');
 check('home screen shown first', visible(window, 'home'));
 check('one save file listed', window.document.querySelectorAll('.program-button').length === 1);
 check(
-  'default set is the committed 50',
-  text(window, 'program-list').includes('50 puzzles'),
+  'default set is the committed 100',
+  text(window, 'program-list').includes('100 puzzles'),
   text(window, 'program-list'),
 );
 
@@ -89,7 +89,7 @@ window.document.getElementById('target-input').value = '25';
 window.document.getElementById('primary').click();
 check('practice screen opens', visible(window, 'practice'));
 check('target applied', text(window, 'target') === '25:00', text(window, 'target'));
-check('counter reads puzzle 1', text(window, 'counter') === 'Puzzle 1 of 50', text(window, 'counter'));
+check('counter reads puzzle 1', text(window, 'counter') === 'Puzzle 1 of 100', text(window, 'counter'));
 
 const stored = () => JSON.parse(window.localStorage.getItem('woodpecker.v2'));
 check('progress persisted at cycle start', stored().programs[0].progress?.cycle === 1);

@@ -1,7 +1,7 @@
 # Woodpecker
 
 A personal chess puzzle cycle trainer implementing the Woodpecker Method: solve the
-same fixed set of 50 puzzles in repeated timed cycles, getting faster and more
+same fixed set of 100 master-game puzzles in repeated timed cycles, getting faster and more
 accurate each cycle.
 
 Single user, no accounts, no server. All state in `localStorage`. Ships as a static
@@ -39,6 +39,6 @@ exist to regenerate it from the Lichess database (~290 MB, cached under
 `scripts/data/` after the first run):
 
 ```
-python scripts/select_puzzles.py   # src/puzzles.json  — the default 50-puzzle set
+python scripts/select_master_set.py   # src/puzzles.json — the default 100-puzzle master-game set
 python scripts/build_pool.py       # src/pool.json     — 10,000-puzzle pool
 ```

@@ -6,7 +6,7 @@ const KEY = 'woodpecker.v2';
 const LEGACY_KEY = 'woodpecker.v1';
 
 const DEFAULT_TARGET_SECONDS = 1800;
-const DEFAULT_NAME = 'Woodpecker 50';
+const DEFAULT_NAME = 'Woodpecker 100';
 
 let nextId = 1;
 
