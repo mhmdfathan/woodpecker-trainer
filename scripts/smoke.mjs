@@ -102,6 +102,11 @@ check('target persisted', stored().programs[0].targetSeconds === 1500);
 await new Promise((resolve) => window.setTimeout(resolve, 1200));
 check('turn indicator filled in', /^(White|Black) to move$/.test(text(window, 'turn')), text(window, 'turn'));
 check('rating and difficulty shown', /^\d+ · \w+/.test(text(window, 'puzzle-meta')), text(window, 'puzzle-meta'));
+check('pause control shown', text(window, 'end-cycle') === 'Pause cycle');
+window.document.getElementById('end-cycle').click();
+check('pause returns to program', visible(window, 'program'));
+check('paused cycle offers resume', text(window, 'primary').startsWith('Resume cycle 1'));
+window.document.getElementById('primary').click();
 
 /* ---------- reload keeps progress ---------- */
 

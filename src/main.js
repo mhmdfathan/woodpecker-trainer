@@ -429,6 +429,7 @@ function resumeCycle() {
 function enterPractice() {
   mode = 'cycle';
   el.practice.dataset.mode = 'cycle';
+  el.endCycle.textContent = 'Pause cycle';
   el.target.textContent = formatTime(program.targetSeconds * 1000);
   showScreen('practice');
   renderPractice();
@@ -532,6 +533,7 @@ function startReview() {
   mode = 'review';
   reviewPos = 0;
   el.practice.dataset.mode = 'review';
+  el.endCycle.textContent = 'End review';
   showScreen('practice');
   renderReview();
   loadPuzzle(reviewQueue[reviewPos]);
