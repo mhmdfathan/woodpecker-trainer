@@ -3,7 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // GitHub Pages serves a project site from /<repo>/, so every asset URL needs
 // that prefix. Change this if the repository is renamed.
-const BASE = '/woodpecker-trainer/';
+const BASE = '/woodpecker-trainer-live/';
 
 export default defineConfig({
   base: BASE,
