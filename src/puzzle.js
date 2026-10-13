@@ -7,7 +7,6 @@ import { KnightArrows } from './knight-arrows.js';
 const ANIMATION = 250;
 const SETUP_MOVE_DELAY = 400;
 const OPPONENT_REPLY_DELAY = 250;
-const MISTAKE_HOLD = 800;
 const SOLUTION_STEP = 700;
 
 const COLORS = { w: 'white', b: 'black' };
@@ -153,21 +152,16 @@ export class PuzzleRunner {
       return;
     }
 
-    // Hold the wrong move briefly, then rewind to the same position. The user
-    // must explicitly choose whether to retry or reveal the solution.
-    this.state = 'failing';
-    this.sync({ interactive: false });
+    // Reset immediately to the exact pre-move position. The incorrect move is
+    // never left on the board, preventing visual distortion while the user
+    // chooses whether to retry or reveal the solution.
     const line = this.sanLine(fenBefore);
+    this.state = 'awaiting-choice';
+    this.chess.undo();
+    this.lastMove = before;
+    this.sync({ interactive: false });
     this.pendingLine = line;
-    this.wait(() => {
-      this.chess.undo();
-      this.ground.set({ animation: { enabled: false } });
-      this.lastMove = before;
-      this.sync({ interactive: false });
-      this.ground.set({ animation: { enabled: true } });
-      this.state = 'awaiting-choice';
-      this.onRetry?.({ line });
-    }, MISTAKE_HOLD);
+    this.onRetry?.({ line });
   }
 
   retry() {
