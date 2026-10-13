@@ -351,8 +351,8 @@ function onThemeToggled(checkbox) {
 function openBuilder() {
   el.setName.value = `Set ${state.programs.length + 1}`;
   el.setCount.value = 100;
-  el.setMin.value = 1500;
-  el.setMax.value = 1800;
+  el.setMin.value = 800;
+  el.setMax.value = 1400;
   el.setMin.min = POOL_RATINGS.min;
   el.setMax.min = POOL_RATINGS.min;
   el.setMin.max = POOL_RATINGS.max;
