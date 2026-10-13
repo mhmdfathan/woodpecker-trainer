@@ -343,18 +343,18 @@ body {
   cursor: pointer;
 }
 
-/* The miss review is untimed and unscored, so the clock and tally go away. */
-#practice[data-mode='review'] .hud-row:first-child,
-#practice[data-mode='review'] .tally {
+/* The miss review is untimed and unscored, so its cycle metrics go away. */
+#practice[data-mode='review'] .dashboard-metrics,
+#practice[data-mode='review'] .dashboard-current {
   display: none;
 }
 
-/* Practice HUD: clock against target, counter, running tally. Nothing else. */
+/* Practice HUD: the dashboard owns cycle metrics; the board remains a separate square. */
 .hud {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin-bottom: 10px;
+  gap: 8px;
+  margin-bottom: 12px;
   font-variant-numeric: tabular-nums;
 }
 
@@ -364,16 +364,71 @@ body {
   justify-content: space-between;
 }
 
-.clock {
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.hud-heading {
+  align-items: center;
 }
 
-.target,
-.hud-row + .hud-row {
+.dashboard-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dashboard {
+  padding: 10px 12px 12px;
+  border: 1px solid #d5d0c8;
+  border-radius: 8px;
+  background: #faf9f7;
+}
+
+.dashboard-current {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #e2ded8;
+}
+
+.dashboard-label,
+.dashboard-metrics dt {
+  color: #6b6864;
+  font-size: 12px;
+}
+
+.dashboard-current strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px 12px;
+  margin: 10px 0 0;
+}
+
+.dashboard-metrics div {
+  min-width: 0;
+}
+
+.dashboard-metrics dt {
+  margin-bottom: 2px;
+}
+
+.dashboard-metrics dd {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hud-detail {
   font-size: 14px;
   color: #6b6864;
+}
+
+.hud-detail #puzzle-meta {
+  text-align: right;
 }
 
 .turn {
@@ -390,10 +445,6 @@ body {
   color: #8a857e;
   text-decoration: underline;
   cursor: pointer;
-}
-
-.tally {
-  letter-spacing: 0.02em;
 }
 
 .progress {
@@ -467,4 +518,17 @@ cg-board {
 
 .status[data-result='missed'] {
   color: #a3423c;
+}
+
+@media (max-width: 380px) {
+  .dashboard-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 8px;
+  }
+
+  .dashboard-current {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+  }
 }

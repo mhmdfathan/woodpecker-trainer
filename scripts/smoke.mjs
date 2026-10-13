@@ -91,6 +91,13 @@ check('practice screen opens', visible(window, 'practice'));
 check('solution control exists', window.document.getElementById('show-solution') != null);
 check('target applied', text(window, 'target') === '25:00', text(window, 'target'));
 check('counter reads puzzle 1', text(window, 'counter') === 'Puzzle 1 of 100', text(window, 'counter'));
+check('dashboard is visible', visible(window, 'practice') && Boolean(window.document.querySelector('.dashboard')) && text(window, 'counter') === 'Puzzle 1 of 100');
+check('dashboard shows initial counts',
+  text(window, 'solved-count') === '0' &&
+  text(window, 'missed-count') === '0' &&
+  text(window, 'remaining-count') === '100' &&
+  text(window, 'progress-percent') === '0%',
+);
 
 const stored = () => JSON.parse(window.localStorage.getItem('woodpecker.v2'));
 check('progress persisted at cycle start', stored().programs[0].progress?.cycle === 1);
@@ -106,6 +113,7 @@ check('pause control shown', text(window, 'end-cycle') === 'Pause cycle');
 window.document.getElementById('end-cycle').click();
 check('pause returns to program', visible(window, 'program'));
 check('paused cycle offers resume', text(window, 'primary').startsWith('Resume cycle 1'));
+check('paused progress persists elapsed time', stored().programs[0].progress?.elapsedMs >= 0);
 window.document.getElementById('primary').click();
 
 /* ---------- reload keeps progress ---------- */

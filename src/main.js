@@ -24,7 +24,8 @@ for (const id of [
   'builder-preview', 'create-set',
   'summary-cycle', 'summary-time', 'summary-stats', 'summary-best', 'summary-miss-count',
   'summary-misses', 'summary-clean', 'review', 'done',
-  'board', 'clock', 'target', 'counter', 'solved-count', 'missed-count', 'progress-bar',
+  'board', 'clock', 'target', 'counter', 'solved-count', 'missed-count',
+  'remaining-count', 'progress-percent', 'progress-bar',
   'status', 'turn', 'puzzle-meta', 'end-cycle', 'show-solution',
 ]) {
   // 'progress-bar' is reachable as el.progressBar.
@@ -560,10 +561,15 @@ function renderReview() {
 
 function renderPractice() {
   const solved = results.filter((r) => r.solved).length;
-  el.counter.textContent = `Puzzle ${index + 1} of ${puzzles.length}`;
+  const completed = results.length;
+  const percent = Math.round((completed / puzzles.length) * 100);
+  const current = `Puzzle ${Math.min(index + 1, puzzles.length)} of ${puzzles.length}`;
+  el.counter.textContent = current;
   el.solvedCount.textContent = solved;
-  el.missedCount.textContent = results.length - solved;
-  el.progressBar.style.width = `${(results.length / puzzles.length) * 100}%`;
+  el.missedCount.textContent = completed - solved;
+  el.remainingCount.textContent = puzzles.length - completed;
+  el.progressPercent.textContent = `${percent}%`;
+  el.progressBar.style.width = `${percent}%`;
   renderClock(clock.elapsedMs);
 }
 

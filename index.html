@@ -97,18 +97,43 @@
 
       <section id="practice" class="screen" data-mode="cycle" hidden>
         <header class="hud">
-          <div class="hud-row">
-            <span>
-              <span id="clock" class="clock">0:00</span>
-              <span class="target">/ <span id="target">30:00</span></span>
-            </span>
+          <div class="hud-row hud-heading">
+            <h1 class="dashboard-title">Cycle progress</h1>
             <button id="end-cycle" class="link-button" type="button">Pause cycle</button>
           </div>
-          <div class="hud-row">
-            <span id="counter">Puzzle 1 of 100</span>
-            <span class="tally"><span id="solved-count">0</span>&#10003; <span id="missed-count">0</span>&#10007;</span>
+          <div class="dashboard" aria-label="Cycle progress dashboard">
+            <div class="dashboard-current">
+              <span class="dashboard-label">Current puzzle</span>
+              <strong id="counter">Puzzle 1 of 100</strong>
+            </div>
+            <dl class="dashboard-metrics">
+              <div>
+                <dt>Solved</dt>
+                <dd id="solved-count">0</dd>
+              </div>
+              <div>
+                <dt>Missed</dt>
+                <dd id="missed-count">0</dd>
+              </div>
+              <div>
+                <dt>Remaining</dt>
+                <dd id="remaining-count">100</dd>
+              </div>
+              <div>
+                <dt>Progress</dt>
+                <dd id="progress-percent">0%</dd>
+              </div>
+              <div>
+                <dt>Elapsed</dt>
+                <dd id="clock">0:00</dd>
+              </div>
+              <div>
+                <dt>Target</dt>
+                <dd id="target">30:00</dd>
+              </div>
+            </dl>
           </div>
-          <div class="hud-row">
+          <div class="hud-row hud-detail">
             <span id="turn" class="turn">White to move</span>
             <span id="puzzle-meta"></span>
           </div>
