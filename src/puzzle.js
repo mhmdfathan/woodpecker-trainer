@@ -51,6 +51,7 @@ export class PuzzleRunner {
     this.index = 0;
     this.lastMove = undefined;
     this.pendingLine = null;
+    this.solutionRequested = false;
     this.state = 'idle';
 
     this.ground = Chessground(element, {
@@ -81,6 +82,7 @@ export class PuzzleRunner {
     this.index = 0;
     this.lastMove = undefined;
     this.pendingLine = null;
+    this.solutionRequested = false;
     this.state = 'setup';
 
     // The side to move in the raw FEN is the opponent, so the solver is the other.
@@ -166,12 +168,14 @@ export class PuzzleRunner {
 
   revealSolution() {
     if (this.state !== 'solving' || !this.pendingLine) return;
+    this.solutionRequested = true;
     this.state = 'revealing';
     this.showSolution(this.pendingLine ?? []);
   }
 
   /** Replay the moves the solver should have played, one at a time. */
   showSolution(line) {
+    if (!this.solutionRequested) return;
     const step = () => {
       const move = this.puzzle.moves[this.index];
       if (!move) {
